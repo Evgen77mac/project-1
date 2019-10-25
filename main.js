@@ -1,7 +1,16 @@
 "use srict"
 
-let mony = +prompt("Ваш бюджет на месяц", ""),
+let mony, time;
+
+function start() {
+    mony = +prompt("Ваш бюджет на месяц", "");
     time = prompt("Введите дату формата YYYY-MM-DD", "");
+
+    while(isNaN(mony) || mony == '' || mony == null ) {
+        mony = +prompt("Ваш бюджет на месяц", "");
+    }
+}
+start();
 
 let appData = {
     budget: mony,
@@ -9,21 +18,26 @@ let appData = {
     optionalExpenses: {},
     income: [],
     timeData: time,
-    savings: false
+    savings: true
 };
 
-for (let i = 0; i < 2; i++) {
-    let a = prompt("Введите обязательную статью расходов в месяц", ""),
-        b = prompt("Во сколько обойдется?", "");
-
-    if ( (typeof(a)) === "string" && (typeof(a)) != null && (typeof(b)) 
-        != null && a != '' && b != '' && a.length < 50) {
-        console.log("done");
-        appData.expenses[a] = b;
+function chooseExpenses() {
+    for (let i = 0; i < 2; i++) {
+        let a = prompt("Введите обязательную статью расходов в месяц", ""),
+            b = prompt("Во сколько обойдется?", "");
+    
+        if ( (typeof(a)) === "string" && (typeof(a)) != null && (typeof(b)) 
+            != null && a != '' && b != '' && a.length < 50) {
+            console.log("done");
+            appData.expenses[a] = b;
+        } else {
+            i = i - 1;
+        }
     }
 }
+chooseExpenses();
 
-appData.monyPerDay = appData.budget / 30;
+appData.monyPerDay = (appData.budget / 30).toFixed();
 
 alert("Ежедневная статья расходов: " + appData.monyPerDay);
 
@@ -36,3 +50,14 @@ if (appData.monyPerDay < 3) {
 } else {
     console.log("Произошла ошибка");
 }
+
+function checkSavings() {
+    if (appData.savings == true) {
+        let save = +prompt("Какова сумма накоплений?", ""),
+            percent = +prompt("Под каой процент?", "");
+
+        appData.monthIncome = save/100/12*percent;
+        alert("Доход в месяц с вашего депозита: " + appData.monthIncome);
+    }
+}
+checkSavings();
